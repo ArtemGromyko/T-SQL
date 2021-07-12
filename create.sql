@@ -1,0 +1,69 @@
+DROP DATABASE Banks
+GO
+
+CREATE DATABASE Banks
+GO
+
+ALTER TABLE status
+	DROP CONSTRAINT FK_status_client
+GO
+
+ALTER TABLE card
+	DROP CONSTRAINT FK_client_card,
+		 CONSTRAINT FK_bank_card
+GO
+
+DROP TABLE card
+GO
+
+DROP TABLE bank
+GO
+
+DROP TABLE client
+GO
+
+DROP TABLE status
+GO
+
+CREATE TABLE bank(
+	id INT IDENTITY PRIMARY KEY,
+	name VARCHAR(60),
+	city VARCHAR(20)
+)
+GO
+
+CREATE TABLE client(
+	id INT IDENTITY PRIMARY KEY,
+	full_name VARCHAR(60),
+	passport_number VARCHAR(20),
+	address VARCHAR(50)
+)
+GO
+
+CREATE TABLE card(
+	id INT IDENTITY PRIMARY KEY,
+	number VARCHAR(19) UNIQUE,
+	client_id INT,
+	bank_id INT
+)
+GO
+
+CREATE TABLE status(
+	id INT IDENTITY PRIMARY KEY,
+	name VARCHAR(60),
+	client_id INT
+)
+GO
+
+ALTER TABLE status
+	ADD CONSTRAINT FK_status_client
+			FOREIGN KEY (client_id) REFERENCES client
+GO
+
+ALTER TABLE card
+	ADD CONSTRAINT FK_client_card
+			FOREIGN KEY (client_id) REFERENCES client,
+		CONSTRAINT FK_bank_card 
+			FOREIGN KEY (bank_id) REFERENCES card
+GO
+
